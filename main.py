@@ -14,7 +14,18 @@ def check_integrity():
     files = sorted([int(i) for i in files])
 
     for file in files[1:]:
-        h = json.load(open(blockchain_dir + str(file)))['hash']
+        f = open(blockchain_dir + str(file))
+        h = json.load(f)['hash']
+
+        prev_file = str(file - 1)
+        actual_hash = get_hash(prev_file)
+
+        if h == actual_hash:
+            res = 'OK!'
+        else:
+            res = 'Corrupted'
+
+        print('block {} is: {}'.format(prev_file, res))
  
 def create_block(user, amoutCoin, transactionTo, hash=''):
     blockchain_dir = os.curdir + '/blockchain/'
